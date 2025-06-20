@@ -25,40 +25,56 @@ def load_delivery_data(file_name) -> None:
 
 def load_distance_data(file_name) -> list and dict:
     #Used to store the addresses and indexes as key:value pair
-    distances_dict = {}
+    address_indices = {}
     #Used to store the distance floats
-    distances_floats = []
+    distances_between_address = []
     with open(file_name) as distance_file:
         distance_table = csv.reader(distance_file, delimiter=",")
         for index, distance in enumerate(distance_table):
             #Addresses saved as key in dictionary
-            distances_dict[distance[0]] = index
+            address_indices[distance[0]] = index
             #Removes the addresses to save list of floats in a separate table
             distance.pop(0)
-            distances_floats.append(distance)
+            distances_between_address.append(distance)
 
-        return distances_dict, distances_floats
+        return address_indices, distances_between_address
 
 
 start_time = datetime(2025, 6, 18, 8)
-def delivery(truck: list, time: object, distance_dict, distance_floats):
-    for index, package_id in enumerate(truck):
+def delivery(truck: list, time: object, address_dict, distance_floats):
+    #Starting location will never change
+    THE_HUB = 0
+    min_distance = float("inf")
+    current_truck_location = THE_HUB
+    for package_id in truck:
         package_obj = hash_map_1.package_lookup(package_id)
-        address_index = distance_dict[package_obj.address]
+        address_index = address_dict[package_obj.address]
+        print(f"id {package_id}: {package_obj}")
+        print(f"truck location: {current_truck_location}")
 
+        #Distance table has empty cells. This prevents querying an empty cell
+        if address_index >= current_truck_location:
+            address_distance = float(distance_floats[address_index][current_truck_location])
+        else:
+            address_distance = float(distance_floats[current_truck_location][address_index])
 
-
+        if min_distance > address_distance:
+            min_distance = address_distance
+            current_truck_location = address_index
+        print(min_distance)
 
     #print(start_time.strftime("%I:%M %p")) // FIX ME
 
 
 hash_map_1 = HashMap()
 load_delivery_data("WGUPS_Package_File.csv")
-distance_dict, distance_floats = load_distance_data("WGUPS_Distance_Table.csv")
+address_dict, distance_between_address = load_distance_data("WGUPS_Distance_Table.csv")
 #print(distance_floats[2][1]) # distance between 1330 2100 S and 1060 Dalton // FIX ME
 
 
-delivery(TRUCK_3, start_time, distance_dict, distance_floats)
+print(f"Address indices: {address_dict}\n")
+
+delivery(TRUCK_1, start_time, address_dict, distance_between_address)
 #delivery(truck_2, start_time) // FIX ME
 #delivery(truck_3, start_time) // FIX ME
 
