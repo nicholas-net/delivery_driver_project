@@ -49,8 +49,8 @@ def delivery(truck: list, time: object, address_dict, distance_floats):
     for package_id in truck:
         package_obj = hash_map_1.package_lookup(package_id)
         address_index = address_dict[package_obj.address]
-        print(f"id {package_id}: {package_obj}")
-        print(f"truck location: {current_truck_location}")
+        print(f"id {package_id}: {package_obj}") # FIX ME
+        print(f"truck location: {current_truck_location}") # FIX ME
 
         #Distance table has empty cells. This prevents querying an empty cell
         if address_index >= current_truck_location:
@@ -58,10 +58,14 @@ def delivery(truck: list, time: object, address_dict, distance_floats):
         else:
             address_distance = float(distance_floats[current_truck_location][address_index])
 
-        if min_distance > address_distance:
-            min_distance = address_distance
-            current_truck_location = address_index
-        print(min_distance)
+            if min_distance > address_distance:
+                min_distance = address_distance
+                closest_package_id = package_id
+                closest_address_index = address_index
+
+    current_truck_location = closest_address_index
+    print(current_truck_location)
+
 
     #print(start_time.strftime("%I:%M %p")) // FIX ME
 
