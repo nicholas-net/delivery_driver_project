@@ -1,6 +1,8 @@
 #Student ID: 011383845
 import csv
 import datetime as dt
+import time
+
 from hash_map import HashMap
 from package import Package
 
@@ -107,13 +109,71 @@ def delivery(truck: list, time: object, address_dict: dict, distance_floats: lis
 
 
 def print_packages():
-    print("Please enter a time formated \"HH:MM XM\"")
+    print("A: View single package")
+    print("B: View all packages")
+    print("Q: Quit")
     user_input = input()
-    while user_input != "Quit":
+
+    while user_input.upper() != "Q":
 
 
-        user_input = input()
 
+        if user_input.upper() == "A":
+            print("Time:")
+            time_request = input()
+            print("Package ID:")
+            id_request = int(input())
+            #Fetches package from the hash map
+            package = hash_map_1.package_lookup(id_request)
+
+            input_time = dt.datetime.strptime(time_request, "%I:%M %p")
+            package_time = dt.datetime.strptime(package.timestamp, "%I:%M %p")
+            TRUCK_START_TIME = "8:00 AM"
+            truck_start_time = dt.datetime.strptime(TRUCK_START_TIME, "%I:%M %p")
+
+            #Some packages have been delayed
+            delayed_packages = [6, 25, 28, 32]
+            if id_request in delayed_packages:
+                print('test')
+
+            else:
+
+                if input_time >= package_time:
+                    print(package)
+
+                elif truck_start_time < input_time < package_time:
+                    package.status = "En route"
+                    package.timestamp = None
+                    print(package)
+
+                else:
+                    package.status = "At the hub"
+                    package.timestamp = None
+                    print(package)
+
+            print("--------------------------------------------------")
+            print("A: View single package")
+            print("B: View all packages")
+            print("Q: Quit")
+            user_input = input()
+
+
+
+
+
+
+
+            # time_request = int(input())
+            # time_conv = dt.datetime(time_request)
+            # timestamp_conv = dt.datetime.strptime(package.timestamp, "%I:%M %p")
+            # print(timestamp_conv)
+            #
+            #
+            #
+            #
+            # if time_conv >= timestamp_conv:
+            #     print(f"{package.status}: {time_conv}")
+            #     print(time_conv)
 
 
 
@@ -130,7 +190,7 @@ delivery(TRUCK_1, start_time, address_dict, distance_between_address)
 delivery(TRUCK_2, start_time, address_dict, distance_between_address)
 delivery(TRUCK_3, start_time, address_dict, distance_between_address)
 print_packages()
-print(hash_map_1)
+
 
 
 
