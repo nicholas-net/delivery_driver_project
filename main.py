@@ -133,11 +133,16 @@ def print_packages():
 
             #Some packages have been delayed
             delayed_packages = [6, 25, 28, 32]
+            delayed_time = "9:05 AM"
+            delayed_time_convert = dt.datetime.strptime(delayed_time, "%I:%M %p")
             if id_request in delayed_packages:
-                print('test')
+
+                if input_time <= delayed_time_convert:
+                    package.status = "Delayed"
+                    package.timestamp = None
+                    print(package)
 
             else:
-
                 if input_time >= package_time:
                     print(package)
 
