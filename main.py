@@ -42,7 +42,7 @@ def load_distance_data(file_name) -> list and dict:
         return address_indices, distances_between_address
 
 
-def delivery(truck: list, time: object, address_dict: dict, distance_floats: list):
+def delivery(truck: list, time: object, address_dict: dict, distance_floats: list) -> None:
     """
     Delivers the packages
 
@@ -70,7 +70,7 @@ def delivery(truck: list, time: object, address_dict: dict, distance_floats: lis
         for package_id in truck:
             package_obj = hash_map_1.package_lookup(package_id)
             address_index = address_dict[package_obj.address]
-            print(f"id {package_id}: {package_obj}")  # FIX ME
+            #print(f"id {package_id}: {package_obj}")  # FIX ME
 
             if package_obj.status != "Delivered":
                 #Distance table has empty cells. This prevents querying an empty cell
@@ -88,6 +88,7 @@ def delivery(truck: list, time: object, address_dict: dict, distance_floats: lis
             current_truck_location = closest_address_index
             closest_package = hash_map_1.package_lookup(closest_package_id)
             closest_package.status = "Delivered"
+            closest_package.truck_number = truck
 
             total_mileage += closest_distance
             time_passed = closest_distance / TRUCK_SPEED
@@ -98,7 +99,26 @@ def delivery(truck: list, time: object, address_dict: dict, distance_floats: lis
             time_stamp = time.strftime("%I:%M %p")
             closest_package.timestamp = time_stamp
 
-        print(f"Total miles: {round(total_mileage, 2)}")
+
+
+        #print(f"Total miles: {round(total_mileage, 2)}") // FIX ME
+
+
+
+
+def print_packages():
+    print("Please enter a time formated \"HH:MM XM\"")
+    user_input = input()
+    while user_input != "Quit":
+
+
+        user_input = input()
+
+
+
+
+
+
 
 
 hash_map_1 = HashMap()
@@ -107,8 +127,12 @@ load_delivery_data("WGUPS_Package_File.csv")
 address_dict, distance_between_address = load_distance_data("WGUPS_Distance_Table.csv")
 
 delivery(TRUCK_1, start_time, address_dict, distance_between_address)
-#delivery(truck_2, start_time) // FIX ME
-#delivery(truck_3, start_time) // FIX ME
+delivery(TRUCK_2, start_time, address_dict, distance_between_address)
+delivery(TRUCK_3, start_time, address_dict, distance_between_address)
+print_packages()
+print(hash_map_1)
+
+
 
 
 """ // FIX ME

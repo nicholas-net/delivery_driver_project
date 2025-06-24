@@ -1,7 +1,7 @@
 
 
 class Package:
-    def __init__(self, id, address, city, state, zip_code, deadline, weight, status="Processing", timestamp=None):
+    def __init__(self, id, address, city, state, zip_code, deadline, weight, status="At Hub", timestamp=None):
         self.id = id
         self.address = address
         self.city = city
