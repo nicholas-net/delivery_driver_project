@@ -44,7 +44,9 @@ def load_distance_data(file_name) -> list and dict:
         return address_indices, distances_between_address
 
 
-def delivery(truck: list, time: object, address_dict: dict, distance_floats: list) -> None:
+truck_miles = {"TRUCK_1": 0, "TRUCK_2": 0, "TRUCK_3": 0}
+
+def delivery(truck: list, time: object, address_dict: dict, distance_floats: list, truck_miles: dict, truck_identifier: str) -> None:
     """
     Loops through the truck and delivers to the next closest address from the trucks current location
 
@@ -102,7 +104,9 @@ def delivery(truck: list, time: object, address_dict: dict, distance_floats: lis
             time_stamp = time.strftime("%I:%M %p")
             closest_package.timestamp = time_stamp
 
-    return round(total_mileage, 2)
+    miles = round(total_mileage, 2)
+    truck_miles[truck_identifier] = miles
+
 
 
 def print_packages() -> object:
@@ -116,9 +120,9 @@ def print_packages() -> object:
     """
     print("Salt Lake City Delivery Service")
     print("---------------------------------")
-    print("A: View single package")
-    print("B: View all packages")
-    print("C: Truck mileage")
+    print("A: View Package Details")
+    print("B: Truck mileage")
+    print("C: View delivery status within a range")
     print("Q: Quit")
     user_input = input()
 
@@ -173,22 +177,39 @@ def print_packages() -> object:
                     package.timestamp = None
                     print(package)
 
-
-
         elif user_input == "B":
             print("---------------------------------")
-            print("Enter time of day:")
+            print("Miles by truck\n")
+            print(f"Truck 1: {truck_miles["TRUCK_1"]}")
+            print(f"Truck 2: {truck_miles["TRUCK_2"]}")
+            print(f"Truck 3: {truck_miles["TRUCK_3"]}")
+
+        elif user_input == "C":
+            print("---------------------------------")
+            print("Enter beginning time:")
             print("(Format: HH:MM XM)")
-            time_request_b = input()
-            package = hash_map_1.print_all_packages()
-            return package
+            beginning_time_input = input()
+            beginning_time = dt.datetime.strptime(beginning_time_input, "%I:%M %p")
+            print("Enter end time")
+            print("(Format: HH:MM XM)")
+            end_time_input = input()
+            end_time = dt.datetime.strptime(end_time_input, "%I:%M %p")
+
+
+            for package in hash_map_1.get_all_packages():
+                package_time_c = dt.datetime.strptime(package.timestamp, "%I:%M %p")
+                if beginning_time <= package_time_c < end_time:
+                    print(package)
+
+
+
 
     
         print("\nSalt Lake City Delivery Service")
         print("---------------------------------")
-        print("A: View single package")
-        print("B: View all packages")
-        print("C: Truck mileage")
+        print("A: View Package Details")
+        print("B: Truck mileage")
+        print("C: View delivery status within a range")
         print("Q: Quit")
         user_input = input()
 
@@ -198,8 +219,8 @@ start_time = dt.datetime(2025, 6, 18, 8)
 load_delivery_data("WGUPS_Package_File.csv")
 address_dict, distance_between_address = load_distance_data("WGUPS_Distance_Table.csv")
 
-print(delivery(TRUCK_1, start_time, address_dict, distance_between_address))
-delivery(TRUCK_2, start_time, address_dict, distance_between_address)
-delivery(TRUCK_3, start_time, address_dict, distance_between_address)
+delivery(TRUCK_1, start_time, address_dict, distance_between_address, truck_miles,"TRUCK_1")
+delivery(TRUCK_2, start_time, address_dict, distance_between_address, truck_miles, "TRUCK_2")
+delivery(TRUCK_3, start_time, address_dict, distance_between_address, truck_miles, "TRUCK_3")
 print_packages()
-hash_map_1.print_all_packages()
+hash_map_1.get_all_packages()

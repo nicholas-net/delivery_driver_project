@@ -74,13 +74,13 @@ class HashMap:
         raise Exception(f"{package_id} not found")
 
 
-    def print_all_packages(self):
-
-        package_list = self.map
-
-        for i in range(1, len(package_list)):
-            print(package_list[i])
-
+    def get_all_packages(self):
+        all_packages = []
+        for bucket in self.map:
+            if bucket is not None:
+                for entry in bucket:
+                    all_packages.append(entry[1])
+        return all_packages
 
 
 
