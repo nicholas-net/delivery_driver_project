@@ -13,7 +13,7 @@ class Package:
         self.timestamp = timestamp
 
     def __str__(self):
-        return f"{self.address}, {self.city}, {self.state}, {self.zip}, {self.deadline}, {self.weight}, {self.status}, {self.timestamp}"
+        return f" {self.id}, {self.address}, {self.city}, {self.state}, {self.zip}, {self.deadline}, {self.weight}, {self.status}, {self.timestamp}"
 
     def __repr__(self):
         return f"{self.address}, {self.city}, {self.state}, {self.zip}, {self.deadline}, {self.weight}, {self.status}, {self.timestamp}"

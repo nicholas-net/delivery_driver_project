@@ -109,7 +109,7 @@ def delivery(truck: list, time: object, address_dict: dict, distance_floats: lis
 
 
 
-def print_packages() -> object:
+def package_interface() -> object:
     """
     Displays an interface with options to find the details of a specific packages delivery or the total truck mileage
 
@@ -120,9 +120,8 @@ def print_packages() -> object:
     """
     print("Salt Lake City Delivery Service")
     print("---------------------------------")
-    print("A: View Package Details")
+    print("A: View Delivery Status")
     print("B: Truck mileage")
-    print("C: View delivery status within a range")
     print("Q: Quit")
     user_input = input()
 
@@ -134,48 +133,44 @@ def print_packages() -> object:
             print("(Format: HH:MM XM)")
             time_request = input()
             print("---------------------------------")
-            print("Package ID:")
-            id_request = int(input())
-            #Fetches package from the hash map
-            package = hash_map_1.package_lookup(id_request)
-
             input_time = dt.datetime.strptime(time_request, "%I:%M %p")
-            package_time = dt.datetime.strptime(package.timestamp, "%I:%M %p")
             TRUCK_START_TIME = "8:00 AM"
             truck_start_time = dt.datetime.strptime(TRUCK_START_TIME, "%I:%M %p")
 
-            #Stores some packages in a unique list because these have been delayed
+            # Stores some packages in a unique list because these have been delayed
             delayed_packages = [6, 25, 28, 32]
-            delayed_time = "9:05 AM"
-            delayed_time_convert = dt.datetime.strptime(delayed_time, "%I:%M %p")
-            #Stores incorrectly filled out addresses that need to be remediated
+            delayed_time_str = "9:05 AM"
+            delayed_time = dt.datetime.strptime(delayed_time_str, "%I:%M %p")
+            # Stores incorrectly filled out addresses that need to be remediated
             wrong_address_filed = [9]
             address_update_time = "10:20 AM"
             address_update = dt.datetime.strptime(address_update_time, "%I:%M %p")
-            if id_request in delayed_packages:
-                if input_time <= delayed_time_convert:
-                    package.status = "Delayed"
-                    package.timestamp = None
-                    print(package)
 
-            elif id_request in wrong_address_filed:
-                if input_time < address_update:
-                    package.address = "300 State St"
-                    print(package)
+            for package in hash_map_1.get_all_packages():
+                package_time = dt.datetime.strptime(package.timestamp, "%I:%M %p")
 
-            else:
-                if input_time >= package_time:
-                    print(package)
+                if package.id in delayed_packages:
+                    if input_time <= delayed_time:
+                        package.status = "Delayed"
+                        package.timestamp = None
 
-                elif truck_start_time < input_time < package_time:
-                    package.status = "En route"
-                    package.timestamp = None
-                    print(package)
+                elif package.id in wrong_address_filed:
+                    if input_time < address_update:
+                        package.address = "300 State St"
 
                 else:
-                    package.status = "At the hub"
-                    package.timestamp = None
-                    print(package)
+
+                    if input_time < truck_start_time:
+                        package.status = "At the hub"
+                        package.timestamp = None
+
+                    elif package_time > input_time > truck_start_time:
+                        package.status = "En route"
+                        package.timestamp = None
+
+
+
+                print(package)
 
         elif user_input == "B":
             print("---------------------------------")
@@ -184,32 +179,11 @@ def print_packages() -> object:
             print(f"Truck 2: {truck_miles["TRUCK_2"]}")
             print(f"Truck 3: {truck_miles["TRUCK_3"]}")
 
-        elif user_input == "C":
-            print("---------------------------------")
-            print("Enter beginning time:")
-            print("(Format: HH:MM XM)")
-            beginning_time_input = input()
-            beginning_time = dt.datetime.strptime(beginning_time_input, "%I:%M %p")
-            print("Enter end time")
-            print("(Format: HH:MM XM)")
-            end_time_input = input()
-            end_time = dt.datetime.strptime(end_time_input, "%I:%M %p")
 
-
-            for package in hash_map_1.get_all_packages():
-                package_time_c = dt.datetime.strptime(package.timestamp, "%I:%M %p")
-                if beginning_time <= package_time_c < end_time:
-                    print(package)
-
-
-
-
-    
         print("\nSalt Lake City Delivery Service")
         print("---------------------------------")
-        print("A: View Package Details")
+        print("A: View Delivery Status")
         print("B: Truck mileage")
-        print("C: View delivery status within a range")
         print("Q: Quit")
         user_input = input()
 
@@ -222,5 +196,5 @@ address_dict, distance_between_address = load_distance_data("WGUPS_Distance_Tabl
 delivery(TRUCK_1, start_time, address_dict, distance_between_address, truck_miles,"TRUCK_1")
 delivery(TRUCK_2, start_time, address_dict, distance_between_address, truck_miles, "TRUCK_2")
 delivery(TRUCK_3, start_time, address_dict, distance_between_address, truck_miles, "TRUCK_3")
-print_packages()
+package_interface()
 hash_map_1.get_all_packages()
