@@ -22,9 +22,13 @@ class HashMap:
             """
             Converts package id into hash between 0 and arrays capacity
 
-            Parameters:
-                package id (int) - unique identifier for recipients order
-            Return:
+            Parameters
+            ----------
+            package_id : int
+                unique identifier for recipients order
+
+            Returns
+            -------
                 index indicating the packages location on the hash map
             """
             return package_id % self.__capacity
@@ -33,9 +37,12 @@ class HashMap:
         """
         Inserts a package object into the hash map
 
-        Parameters:
-            package id (int) - unique identifier used to determine the hash bucket
-            package_obj (package) - package instance containing all the delivery data
+        Parameters
+        ----------
+        package_id : int
+            unique identifier used to determine the hash bucket
+        package_obj : package
+            package instance containing all the delivery data
 
         """
         hashed_id = self._hash_converter(package_id)
@@ -51,8 +58,10 @@ class HashMap:
         """
         Returns the desired package information
 
-        Parameters:
-        package_id (int) - unique identifier to the package
+        Parameters
+        ----------
+        package_id : int
+            unique identifier to the package
         """
 
         hash_bucket = self._hash_converter(package_id) % self.__capacity
@@ -63,6 +72,14 @@ class HashMap:
                 return hash_bucket_list[i][1]
 
         raise Exception(f"{package_id} not found")
+
+
+    def print_all_packages(self):
+
+        package_list = self.map
+
+        for i in range(1, len(package_list)):
+            print(package_list[i])
 
 
 
