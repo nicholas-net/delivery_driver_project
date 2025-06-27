@@ -23,8 +23,7 @@ def load_delivery_data(file_name) -> None:
             delivery_deadline = package[5]
             delivery_weight = package[6]
 
-            package = Package(package_id, delivery_address, delivery_city, delivery_state, delivery_zip,
-                              delivery_deadline, delivery_weight)
+            package = Package(package_id, delivery_address, delivery_city, delivery_state, delivery_zip, delivery_deadline, delivery_weight)
             hash_map_1.insert(package_id, package)
 
 
@@ -153,7 +152,6 @@ def package_interface() -> object:
                 if package.id in delayed_packages:
                     if input_time <= delayed_time:
                         package.status = "Delayed"
-                        package.timestamp = None
 
                 elif package.id in wrong_address_filed:
                     if input_time < address_update:
@@ -163,11 +161,9 @@ def package_interface() -> object:
 
                     if input_time < truck_start_time:
                         package.status = "At the hub"
-                        package.timestamp = None
 
                     elif package_time > input_time > truck_start_time:
                         package.status = "En route"
-                        package.timestamp = None
 
                 if package.id in TRUCK_1:
                     package.truck_id = "TRUCK 1"
