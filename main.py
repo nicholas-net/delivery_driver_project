@@ -2,16 +2,25 @@
 import csv
 import datetime as dt
 import time
+from typing import TextIO
 
 from hash_map import HashMap
 from package import Package
 
+# Package IDs stored in manually loaded trucks
 TRUCK_1 = [4, 5, 6, 7, 8, 9, 10, 11, 12]
 TRUCK_2 = [1, 3, 18, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 36, 38]
 TRUCK_3 = [2, 13, 14, 15, 16, 17, 19, 20, 31, 32, 33, 34, 35, 37, 39, 40]
 
 
 def load_delivery_data(file_name) -> None:
+    """
+    Reads the csv file filled with all the information for each package and converts each row of data
+    into a package object. The package object is placed into a hash map along with the package ID
+
+    Args:
+        file_name (str) - file containing the delivery details of packages
+    """
     with open(file_name) as package_file:
         delivery_data = csv.reader(package_file, delimiter=",")
         for package in delivery_data:
@@ -23,21 +32,34 @@ def load_delivery_data(file_name) -> None:
             delivery_deadline = package[5]
             delivery_weight = package[6]
 
+            # Create package object and insert into hash map
             package = Package(package_id, delivery_address, delivery_city, delivery_state, delivery_zip, delivery_deadline, delivery_weight)
             hash_map_1.insert(package_id, package)
 
 
 def load_distance_data(file_name) -> list and dict:
-    #Used to store the addresses and indexes as key:value pair
+    """
+    Reads csv file containing a table of distances between each delivery address.
+    Each address and its corresponding index are stored as key, value pairs in a dictionary
+
+
+    Args:
+        file_name (str): file with distance data
+
+    Returns:
+        list:
+
+    """
+    # Used to store the addresses and indexes as key:value pair
     address_indices = {}
-    #Used to store the distance floats
+    # Used to store the distance floats
     distances_between_address = []
     with open(file_name) as distance_file:
         distance_table = csv.reader(distance_file, delimiter=",")
         for index, distance in enumerate(distance_table):
-            #Addresses saved as key in dictionary
+            # Addresses saved as key in dictionary
             address_indices[distance[0]] = index
-            #Removes the addresses to save list of floats in a separate table
+            # Removes the addresses to save list of floats in a separate table
             distance.pop(0)
             distances_between_address.append(distance)
 
@@ -148,22 +170,30 @@ def package_interface() -> object:
             #Print all package details and delivery status at the time of day user requests
             for package in hash_map_1.get_all_packages():
                 package_time = dt.datetime.strptime(package.timestamp, "%I:%M %p")
+                #Handles the case of packages not being loaded onto their trucks yet
+                if input_time <= truck_start_time:
+                    #Delayed packages would not be at the hub yet
+                    if package.id in delayed_packages:
+                        if input_time <= delayed_time:
+                            package.status = "Delayed"
+                            package.timestamp = "Processing"
+                    else:
+                        package.status = "At the Hub"
+                        package.timestamp = "Processing"
+                #Handles the case that packages are en route to their destination
+                elif package_time > input_time > truck_start_time:
+                    #Delayed packages wouldn't be en route to their destination until they reach the depot
+                    if package.id in delayed_packages:
+                        if input_time <= delayed_time:
+                            package.status = "Delayed"
+                            package.timestamp = "Processing"
+                    else:
+                        package.status = "En Route"
 
-                if package.id in delayed_packages:
-                    if input_time <= delayed_time:
-                        package.status = "Delayed"
-
-                elif package.id in wrong_address_filed:
-                    if input_time < address_update:
-                        package.address = "300 State St"
-
-                else:
-
-                    if input_time < truck_start_time:
-                        package.status = "At the hub"
-
-                    elif package_time > input_time > truck_start_time:
-                        package.status = "En route"
+                # FIX ME
+                #     elif package.id in wrong_address_filed:
+                #         if input_time < address_update:
+                #             package.address = "300 State St"
 
                 if package.id in TRUCK_1:
                     package.truck_id = "TRUCK 1"

@@ -1,51 +1,36 @@
 from package import Package
-
-
+# Definition for a hash map data structure
 class HashMap:
     def __init__(self, capacity=41):
-        """Initialize hash map with capacity of 41 (prime number)"""
+        # Initialize hash map with capacity of 41 (prime number).
         self.__capacity = capacity
         self.map = [None] * self.__capacity
-
-    def __str__(self) -> str:
-        """Returns packages as strings for debugging"""
-        result = ""
-        for i in range(len(self.map)):
-            result+=f"Index {i}: {self.map[i]}\n"
-        return result
-
-    def __repr__(self) -> str:
-        return self.__str__()
 
 
     def _hash_converter(self, package_id: int) -> int:
             """
-            Converts package id into hash between 0 and arrays capacity
+            Converts package id into hash between 0 and arrays capacity.
 
-            Parameters
-            ----------
-            package_id : int
-                unique identifier for recipients order
+            Args:
+                package_id (int): unique identifier for recipients order.
 
-            Returns
-            -------
-                index indicating the packages location on the hash map
+            Returns:
+                int: index that corresponds to the packages location within the hash map.
             """
             return package_id % self.__capacity
 
+
     def insert(self, package_id: int, package_obj: Package) -> None:
         """
-        Inserts a package object into the hash map
+        Package ID finds a open bucket within the hash map and inserts the package.
 
-        Parameters
-        ----------
-        package_id : int
-            unique identifier used to determine the hash bucket
-        package_obj : package
-            package instance containing all the delivery data
-
+        Args:
+            package_id (int): packages unique identifier.
+            package_obj (obj): package instance.
         """
+        # Hash map index for this package id
         hashed_id = self._hash_converter(package_id)
+        # Package ID and object grouped into a pair for storage in a bucket
         delivery_data = [package_id, package_obj]
 
         if self.map[hashed_id] is None:
@@ -56,12 +41,13 @@ class HashMap:
 
     def package_lookup(self, package_id: int) -> Package:
         """
-        Returns the desired package information
+        Provides a way to directly access individual packages from the hash map buckets
 
-        Parameters
-        ----------
-        package_id : int
-            unique identifier to the package
+        Args:
+            package_id (int) : unique identifier to the package
+
+        Returns:
+            Package: package object
         """
 
         hash_bucket = self._hash_converter(package_id) % self.__capacity
