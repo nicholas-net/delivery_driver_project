@@ -23,7 +23,8 @@ def load_delivery_data(file_name) -> None:
             delivery_deadline = package[5]
             delivery_weight = package[6]
 
-            package = Package(package_id, delivery_address, delivery_city, delivery_state, delivery_zip, delivery_deadline, delivery_weight)
+            package = Package(package_id, delivery_address, delivery_city, delivery_state, delivery_zip,
+                              delivery_deadline, delivery_weight)
             hash_map_1.insert(package_id, package)
 
 
@@ -108,7 +109,6 @@ def delivery(truck: list, time: object, address_dict: dict, distance_floats: lis
     truck_miles[truck_identifier] = miles
 
 
-
 def package_interface() -> object:
     """
     Displays an interface with options to find the details of a specific packages delivery or the total truck mileage
@@ -146,6 +146,7 @@ def package_interface() -> object:
             address_update_time = "10:20 AM"
             address_update = dt.datetime.strptime(address_update_time, "%I:%M %p")
 
+            #Print all package details and delivery status at the time of day user requests
             for package in hash_map_1.get_all_packages():
                 package_time = dt.datetime.strptime(package.timestamp, "%I:%M %p")
 
@@ -168,6 +169,14 @@ def package_interface() -> object:
                         package.status = "En route"
                         package.timestamp = None
 
+                if package.id in TRUCK_1:
+                    package.truck_id = "TRUCK 1"
+
+                elif package.id in TRUCK_2:
+                    package.truck_id = "TRUCK 2"
+
+                else:
+                    package.truck_id = "TRUCK 3"
 
 
                 print(package)

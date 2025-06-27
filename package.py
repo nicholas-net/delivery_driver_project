@@ -1,7 +1,7 @@
 
 
 class Package:
-    def __init__(self, id, address, city, state, zip_code, deadline, weight, status="At Hub", timestamp=None):
+    def __init__(self, id, address, city, state, zip_code, deadline, weight, status="At Hub", timestamp=None, truck_id=None):
         self.id = id
         self.address = address
         self.city = city
@@ -11,14 +11,15 @@ class Package:
         self.weight = weight
         self.status = status
         self.timestamp = timestamp
+        self.truck_id = truck_id
 
     def __str__(self):
-        return f" {self.id}, {self.address}, {self.city}, {self.state}, {self.zip}, {self.deadline}, {self.weight}, {self.status}, {self.timestamp}"
+        return f" {self.id}, {self.address}, {self.city}, {self.state}, {self.zip}, {self.deadline}, {self.weight}, {self.status}, {self.timestamp}, {self.truck_id}"
 
     def __repr__(self):
-        return f"{self.address}, {self.city}, {self.state}, {self.zip}, {self.deadline}, {self.weight}, {self.status}, {self.timestamp}"
+        return f"{self.address}, {self.city}, {self.state}, {self.zip}, {self.deadline}, {self.weight}, {self.status}, {self.timestamp}, {self.truck_id}"
 
     def get(self):
-        return self.id, self.address, self.city, self.state, self.zip, self.deadline, self.weight, self.status, self.status, self.timestamp
+        return self.id, self.address, self.city, self.state, self.zip, self.deadline, self.weight, self.status, self.status, self.timestamp, {self.truck_id}
 
 
