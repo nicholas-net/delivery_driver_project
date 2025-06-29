@@ -30,9 +30,9 @@ class HashMap:
             package_id (int): packages unique identifier.
             package_obj (obj): package instance.
         """
-        # Hash map index for this package id
+        # Hash map index for this package id.
         hashed_id = self._hash_converter(package_id)
-        # Package ID and object grouped into a pair for storage in a bucket
+        # Package ID and object grouped into a pair for storage in a bucket.
         delivery_data = [package_id, package_obj]
 
         if self.map[hashed_id] is None:
@@ -43,13 +43,13 @@ class HashMap:
 
     def package_lookup(self, package_id: int) -> Package:
         """
-        Provides a way to directly access individual packages from the hash map buckets
+        Provides a way to directly access individual packages from the hash map buckets.
 
         Args:
-            package_id (int) : unique identifier to the package
+            package_id (int) : unique identifier to the package.
 
         Returns:
-            Package: package object
+            Package: package object.
         """
 
         hash_bucket = self._hash_converter(package_id) % self.__capacity
@@ -62,7 +62,14 @@ class HashMap:
         raise Exception(f"{package_id} not found")
 
 
-    def get_all_packages(self):
+    def get_all_packages(self) -> list:
+        """
+        Collects all the packages from their respective buckets in the hash map and puts them in a new list
+
+        Returns:
+            list: a list of all the packages
+
+        """
         all_packages = []
         for bucket in self.map:
             if bucket is not None:
