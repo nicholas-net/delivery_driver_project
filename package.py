@@ -14,6 +14,6 @@ class Package:
     # String representation for a package
 
     def __str__(self):
-            return f" [{self.truck_id}] {self.address}, {self.city}, {self.state} {self.zip} | Deadline: {self.deadline} | Weight: {self.weight} lbs | {self.status}: {self.timestamp}"
+            return f" [{self.truck_id}] , {self.id}: {self.address}, {self.city}, {self.state} {self.zip} | Deadline: {self.deadline} | Weight: {self.weight} lbs | {self.status}: {self.timestamp}"
 
 

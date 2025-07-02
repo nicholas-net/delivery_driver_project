@@ -193,7 +193,7 @@ def package_interface() -> object or float:
                 else:
                     display_address = package.address
 
-                print(f"[{truck_id}] {display_address}, {package.city}, {package.state} {package.zip} | Deadline: {package.deadline} | Weight: {package.weight} lbs | Status: {status}")
+                print(f"[{truck_id}] | ID: {package.id} | {display_address}, {package.city}, {package.state} {package.zip} | Deadline: {package.deadline} | Weight: {package.weight} lbs | Status: {status}")
 
         elif user_input == "B":
             print("---------------------------------")
