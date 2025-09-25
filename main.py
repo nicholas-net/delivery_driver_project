@@ -1,5 +1,4 @@
 # All code written by Nicholas Colon
-# Student ID: 011383845
 
 import csv
 import datetime as dt
