@@ -21,7 +21,7 @@
 <ol>
     <li>Ensure that all requirements are met</li>
     <li>Clone the repository using the command: 
-    <code>git clone https://github.com/yourusername/PackageDeliverySystem.git</code>
+    <code>git clone https://github.com/yourusername/package_delivery_project.git</code>
     </li>
     <li>Navigate to the root directory of the cloned repository</li>
 </ol>
